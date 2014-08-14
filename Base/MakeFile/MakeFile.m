@@ -5,10 +5,28 @@
 //  Created by 朱潮 on 14-8-14.
 //  Copyright (c) 2014年 zhuchao. All rights reserved.
 //
+
 #import "MakeFile.h"
 #define templateHUrl @"https://raw.githubusercontent.com/zhuchaowe/mojo-database/master/h.strings"
 #define templateMUrl @"https://raw.githubusercontent.com/zhuchaowe/mojo-database/master/m.strings"
 @implementation MakeFile
+
+-(void)startWithArgv:(NSArray *)arguments{
+    if(arguments.count < 4){
+        NSLog(@" fileName location jsonUrl is needed");
+        return;
+    }
+    NSString *fileName =  [arguments objectAtIndex:1];
+    NSString *location =  [arguments objectAtIndex:2];
+    NSString *jsonUrl = [arguments objectAtIndex:3];
+    
+    NSLog(@"%@ %@ %@",fileName,location,jsonUrl);
+    self.path = location;
+    NSString *json = [self getJSONWithURL:jsonUrl];
+    NSMutableArray *array = [self checkProperty:json fileName:fileName];
+    NSLog(@"%@",array);
+    [self generateClass:json fileName:fileName];
+}
 
 -(NSMutableArray *)checkProperty:(NSString *)json fileName:(NSString *)fileName {
     NSDictionary *dict   = [json objectFromJSONString];

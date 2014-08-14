@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import "JSONKit.h"
+#import <stdio.h>
 typedef enum
 {
     kString = 0,
@@ -21,6 +22,7 @@ typedef enum
 @property(nonatomic,retain) NSString *path;
 @property(nonatomic,retain) NSMutableString *templateH;
 @property(nonatomic,retain) NSMutableString *templateM;
+-(void)startWithArgv:(NSArray *)arguments;
 -(NSMutableArray *)checkProperty:(NSString *)json fileName:(NSString *)fileName;
 -(NSString*)getJSONWithURL:(NSString *)strUrl;
 -(void)generateClass:(NSString *)jsonString fileName:(NSString *)name;
