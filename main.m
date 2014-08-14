@@ -11,6 +11,7 @@ int main(int argc, const char * argv[]) {
     @autoreleasepool {
         MakeFile *make = [[MakeFile alloc] init];
         [make startWithArgv:[[NSProcessInfo processInfo] arguments]];
+        return 0;
     }
     return 0;
 }
