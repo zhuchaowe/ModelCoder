@@ -1,10 +1,9 @@
-//
-//  main.m
-//  Model
-//
-//  Created by 朱潮 on 14-8-14.
-//  Copyright (c) 2014年 zhuchao. All rights reserved.
-//     NSArray *arguments = @[@"123",@"Test",@"/Users/huwei/Desktop/objc",@"http://test-leway.zjseek.com.cn:8000/api/goods/listCategories"];
+/*
+ podfile-start
+ platform :osx, '10.7'
+ pod 'ModelCoder'
+ podfile-end
+ */
 
 #import "MakeFile.h"
 
