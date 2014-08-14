@@ -5,7 +5,6 @@
 //  Created by 朱潮 on 14-8-14.
 //  Copyright (c) 2014年 zhuchao. All rights reserved.
 //
-
 #import "MakeFile.h"
 #define templateHUrl @"https://raw.githubusercontent.com/zhuchaowe/mojo-database/master/h.strings"
 #define templateMUrl @"https://raw.githubusercontent.com/zhuchaowe/mojo-database/master/m.strings"
