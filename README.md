@@ -3,25 +3,33 @@ ModelCoder
 
 ModelCoder can Automatic generate Objective-C code by JSON string.
 
+####json一键转换为EasyIOS中Model类的工具。
 
 ##Usage
 
-	
-* 1.Installation `objc-run`
+* 1.Installation `Homebrew`
 
-	If you have homebrew installed, just run
+	If you have `homebrew` installed, just jump to the second step
+
+  		ruby -e "$(curl -fsSL https://raw.github.com/Homebrew/homebrew/go/install)"
+	
+* 2.Installation `objc-run`
+	
+	If you have `objc-run` installed, just jump to the third step
 
 		brew install objc-run
 		
-	Otherwise, download the objc-run shell script file and install it in a directory that's in your $PATH. Make sure the executable bit is set like this:
+	find the objc-run path and Make sure the executable bit is set like this:
 
 		chmod u+x objc-run
 
-* 2.curl download the `main.m`
+* 3.curl download the `main.m`
+	
+	If you have download the `main.m`, just jump to the fourth step
 
 		curl -O https://raw.githubusercontent.com/zhuchaowe/ModelCoder/master/main.m
 		
-* 3.run!!!
+* 4.run!!!
 		
 		objc-run main.m  className  savePath  http://the.json.url.com
 
