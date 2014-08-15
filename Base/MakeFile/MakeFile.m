@@ -7,8 +7,8 @@
 //
 
 #import "MakeFile.h"
-#define templateHUrl @"https://raw.githubusercontent.com/zhuchaowe/mojo-database/master/h.strings"
-#define templateMUrl @"https://raw.githubusercontent.com/zhuchaowe/mojo-database/master/m.strings"
+#define templateHUrl @"https://raw.githubusercontent.com/zhuchaowe/ModelCoder/master/strings/h.strings"
+#define templateMUrl @"https://raw.githubusercontent.com/zhuchaowe/ModelCoder/master/strings/m.strings"
 @implementation MakeFile
 
 -(void)startWithArgv:(NSArray *)arguments{
