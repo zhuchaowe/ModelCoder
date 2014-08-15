@@ -39,7 +39,10 @@
     NSString *fileName =  [arguments objectAtIndex:1];
     NSString *location =  [arguments objectAtIndex:2];
     NSString *jsonUrl = [arguments objectAtIndex:3];
-    NSString *baseKey = [arguments objectAtIndex:4] ?: @"";
+    NSString *baseKey = @"";
+    if(arguments.count >4){
+        baseKey = [arguments objectAtIndex:4];
+    }
     
     NSLog(@"%@ %@ %@ %@",fileName,location,jsonUrl,baseKey);
     self.path = location;
