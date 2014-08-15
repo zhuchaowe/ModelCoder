@@ -9,6 +9,26 @@
 #import "MakeFile.h"
 #define templateHUrl @"https://raw.githubusercontent.com/zhuchaowe/ModelCoder/master/strings/h.strings"
 #define templateMUrl @"https://raw.githubusercontent.com/zhuchaowe/ModelCoder/master/strings/m.strings"
+
+
+@implementation NSDictionary(EasyExtend)
+- (id)objectAtPath:(NSString *)path{
+    NSString *separator = @"/";
+    path = [path stringByReplacingOccurrencesOfString:@"." withString:@"/"];
+
+    NSString *	keyPath = [path stringByReplacingOccurrencesOfString:separator withString:@"."];
+    NSRange		range = NSMakeRange( 0, 1 );
+    
+    if ( [[keyPath substringWithRange:range] isEqualToString:@"."] )
+    {
+        keyPath = [keyPath substringFromIndex:1];
+    }
+    
+    NSObject * result = [self valueForKeyPath:keyPath];
+    return (result == [NSNull null]) ? nil : result;
+}
+@end
+
 @implementation MakeFile
 
 -(void)startWithArgv:(NSArray *)arguments{
@@ -19,10 +39,13 @@
     NSString *fileName =  [arguments objectAtIndex:1];
     NSString *location =  [arguments objectAtIndex:2];
     NSString *jsonUrl = [arguments objectAtIndex:3];
+    NSString *baseKey = [arguments objectAtIndex:4] ?: @"";
     
-    NSLog(@"%@ %@ %@",fileName,location,jsonUrl);
+    NSLog(@"%@ %@ %@ %@",fileName,location,jsonUrl,baseKey);
     self.path = location;
+    self.baseKey = baseKey;
     NSString *json = [self getJSONWithURL:jsonUrl];
+
     NSMutableArray *array = [self checkProperty:json fileName:fileName];
     NSLog(@"%@",array);
     [self generateClass:json fileName:fileName];
@@ -132,11 +155,19 @@
     
     NSString *str = [strUrl stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
     NSURL *url = [NSURL URLWithString:str];
-    NSURLRequest *request = [NSURLRequest requestWithURL:url];
-    NSData *data = [NSURLConnection sendSynchronousRequest:request
+    NSData *data = nil;
+    if(url.scheme != nil){
+        NSURLRequest *request = [NSURLRequest requestWithURL:url];
+        data = [NSURLConnection sendSynchronousRequest:request
                                          returningResponse:nil
                                                      error:nil];
+    }else{
+        data = [NSData dataWithContentsOfFile:strUrl];
+    }
     
+    if(data == nil){
+        return nil;
+    }
     NSDictionary *json = [data objectFromJSONData];
     if(json != nil){
         return [json JSONStringWithOptions:JKSerializeOptionPretty error:nil];
@@ -213,6 +244,17 @@
     return [NSString stringWithFormat:@"%@%@",[[str substringToIndex:1] lowercaseString],[str substringWithRange:NSMakeRange(1, str.length-1)]];
 }
 
+-(void)generateClass:(NSString *)name forArray:(NSArray *)json
+{
+    if(json.count >0){
+        if([[json firstObject] isKindOfClass:[NSDictionary class]]){
+            [self generateClass:name forDic:[json firstObject]];
+        }else if([[json firstObject] isKindOfClass:[NSArray class]]){
+            [self generateClass:name forArray:[json firstObject]];
+        }
+    }
+}
+
 -(void)generateClass:(NSString *)name forDic:(NSDictionary *)json
 {
     //准备模板
@@ -240,6 +282,7 @@
     //property
     NSMutableString *proterty = [NSMutableString string];
     NSMutableString *import = [NSMutableString string];
+    NSMutableString *protocol = [NSMutableString string];
     
     for(NSString *key in [json allKeys])
     {
@@ -253,8 +296,9 @@
             {
                 if([self isDataArray:[json objectForKey:key]])
                 {
-                    [proterty appendFormat:@"@property (nonatomic,strong) NSMutableArray *%@;\n",key];
+                    [proterty appendFormat:@"@property (nonatomic,strong) NSMutableArray<%@Entity> *%@;\n",[self uppercaseFirstChar:key],key];
                     [import appendFormat:@"\n#import \"%@Entity.h\"",[self uppercaseFirstChar:key]];
+                    [protocol appendFormat:@"\n@protocol %@Entity \n@end\n",[self uppercaseFirstChar:key]];
                     [self generateClass:[NSString stringWithFormat:@"%@Entity",[self uppercaseFirstChar:key]] forDic:[[json objectForKey:key]objectAtIndex:0]];
                 }
             }
@@ -281,6 +325,11 @@
                                withString:import
                                   options:NSCaseInsensitiveSearch
                                     range:NSMakeRange(0, templateH.length)];
+    [templateH replaceOccurrencesOfString:@"#protocol#"
+                               withString:protocol
+                                  options:NSCaseInsensitiveSearch
+                                    range:NSMakeRange(0, templateH.length)];
+
     [templateH replaceOccurrencesOfString:@"#property#"
                                withString:proterty
                                   options:NSCaseInsensitiveSearch
@@ -309,14 +358,23 @@
 }
 
 - (void)generateClass:(NSString *)jsonString fileName:(NSString *)name {
-    NSDictionary *json   = [jsonString objectFromJSONString];
-    
+    NSObject *json   = [jsonString objectFromJSONString];
     if(json == nil)
     {
         NSLog(@"json is invalid.");
         return;
     }
-    [self generateClass:name forDic:json];
+    if([json isKindOfClass:[NSDictionary class]]){
+        if(![self.baseKey isEqualToString:@""] && self.baseKey != nil){
+            json = [(NSDictionary *)json objectAtPath:self.baseKey];
+        }
+    }
+    
+    if([json isKindOfClass:[NSDictionary class]]){
+        [self generateClass:name forDic:(NSDictionary *)json];
+    }else if([json  isKindOfClass:[NSArray class]]){
+        [self generateClass:name forArray:(NSArray *)json];
+    }
     NSLog(@"generate .h.m(ARC)files，put those to the folder");
 }
 

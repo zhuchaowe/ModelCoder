@@ -35,5 +35,11 @@ ModelCoder can Automatic generate Objective-C code by JSON string.
 
 ##Example
 
-		objc-run main.m Test /Users/huwei/Desktop/objc http://gc.ditu.aliyun.com/regeocoding?l=39.938133,116.395739&type=001
+* 1.read from json url
+
+		objc-run main.m Test /Users/easyios/Desktop/objc http://t.cn/RPjToNg
+		
+* 2.read from json file
+
+		objc-run main.m Test /Users/easyios/Desktop/objc /Users/easyios/Desktop/objc/EasyIOS.json
 

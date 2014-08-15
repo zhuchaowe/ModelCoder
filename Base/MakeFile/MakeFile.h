@@ -18,8 +18,14 @@ typedef enum
     kBool   = 4,
 }JsonValueType;
 
+@interface NSDictionary(EasyExtend)
+- (id)objectAtPath:(NSString *)path;
+@end
+
 @interface MakeFile : NSObject
+
 @property(nonatomic,retain) NSString *path;
+@property(nonatomic,retain) NSString *baseKey;
 @property(nonatomic,retain) NSMutableString *templateH;
 @property(nonatomic,retain) NSMutableString *templateM;
 -(void)startWithArgv:(NSArray *)arguments;
