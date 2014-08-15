@@ -31,7 +31,7 @@ ModelCoder can Automatic generate Objective-C code by JSON string.
 		
 * 4.run!!!
 		
-		objc-run main.m  className  savePath  http://the.json.url.com
+		objc-run main.m  className  savePath  http://the.json.url.com keyPath[optional]
 
 ##Example
 
@@ -42,4 +42,9 @@ ModelCoder can Automatic generate Objective-C code by JSON string.
 * 2.read from json file
 
 		objc-run main.m Test /Users/easyios/Desktop/objc /Users/easyios/Desktop/objc/EasyIOS.json
+		
+* 3.read from json for keypath
+
+		objc-run main.m Test /Users/easyios/Desktop/objc http://t.cn/RPjToNg subspecs/xcconfig
+
 
