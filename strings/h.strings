@@ -9,6 +9,8 @@
 #import "Model.h"
 #import#
 
+#protocol#
+
 @interface #name# : Model
 
 #property#
