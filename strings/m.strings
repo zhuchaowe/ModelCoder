@@ -1,0 +1,13 @@
+//
+//  #name#.m
+//  ModelCoder
+//
+//  Created by EasyIOS on 14-8-14.
+//  Copyright (c) 2014年 zhuchao. All rights reserved.
+//  http://github.com/zhuchaowe/EasyIOS
+
+#import "#name#.h"
+
+@implementation #name#
+
+@end
